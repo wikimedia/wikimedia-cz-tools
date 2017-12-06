@@ -26,6 +26,8 @@ script_path = '/mw/'
 article_path = '/wiki/'
 api_url = base_url + script_path + 'api.php'
 
+config = json.loads(open('config.json', 'r').read())
+
 def get_credentials():
 	"""Gets valid user credentials from storage.
 
@@ -88,8 +90,8 @@ def main():
 		r = s.post(api_url, data={
 			'action': 'login',
 			'format': 'json',
-			'lgname': 'UrbanecmBot',
-			'lgpassword': 'AutoMailUpdater@rf1jpi3a9kfi70ukkr5qvmeucag6cmc6',
+			'lgname': config['username'],
+			'lgpassword': config['password'],
 			'lgtoken': token
 		})
 		# Generate list of accounts
