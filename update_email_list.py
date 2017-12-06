@@ -114,10 +114,11 @@ def main():
 			suspended = "Ne"
 			if user['suspended']:
 				suspended = "Ano"
-			aliasy = ""
+			aliasy = "\n"
 			for email in user['emails']:
-				aliasy += email['address'] + '\n'
-			data = (u"|-", user['name']['givenName'], user['name']['familyName'], user['primaryEmail'], "", admin, suspended)
+				if 'primary' not in email:
+					aliasy += '* ' + email['address'] + '\n'
+			data = (u"|-", user['name']['givenName'], user['name']['familyName'], user['primaryEmail'], aliasy, admin, suspended)
 			wikicode += '\n|'.join(data) + "\n"
 		wikicode += u"|}\n\n=== Distribuční seznamy ===\n"
 		wikicode += u"""{| class="wikitable sortable"
