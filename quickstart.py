@@ -8,6 +8,7 @@ from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
 import json
+import requests
 
 try:
 	import argparse
@@ -15,12 +16,15 @@ try:
 except ImportError:
 	flags = None
 
-# If modifying these scopes, delete your previously saved credentials
-# at ~/.credentials/admin-directory_v1-python-quickstart.json
 SCOPES = 'https://www.googleapis.com/auth/admin.directory.user'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Directory API Python Quickstart'
 
+s = requests.Session()
+base_url = 'https://wiki.wikimedia.cz'
+script_path = '/mw/'
+article_path = '/wiki/'
+api_url = base_url + script_path + 'api.php'
 
 def get_credentials():
 	"""Gets valid user credentials from storage.
@@ -50,10 +54,8 @@ def get_credentials():
 	return credentials
 
 def main():
-	"""Shows basic usage of the Google Admin SDK Directory API.
-
-	Creates a Google Admin SDK API service object and outputs a list of first
-	10 users in the domain.
+	"""
+	Updates list of existing e-mail addresses at all domains at wiki.wikimedia.cz.
 	"""
 	credentials = get_credentials()
 	http = credentials.authorize(httplib2.Http())
@@ -65,7 +67,23 @@ def main():
 	if not users:
 		print('No users in the domain.')
 	else:
-		res = u"""{| class="wikitable"
+		r = s.get(api_url, params={
+			'action': 'query',
+			'meta': 'tokens',
+			'type': 'login',
+			'format': 'json',
+		})
+		token = r.json()['query']['tokens']['logintoken']
+		r = s.post(api_url, data={
+			'action': 'login',
+			'lgname': 'UrbanecmBot',
+			'lgpassword': 'secret',
+			'lgtoken': token
+		})
+		r.json() # Just to actually issue the request
+		# Generate list of accounts
+		wikicode = u"""== Schránky ==
+{| class="wikitable"
 |+
 !Jméno
 !Příjmení
@@ -76,11 +94,25 @@ def main():
 """
 		for user in users:
 			data = (u"|-", user['name']['givenName'], user['name']['familyName'], user['primaryEmail'], "", "", "")
-			row = '\n|'.join(data) + "\n"
-			res += row
-		res += "|}"
-		print(res)
-
+			wikicode += '\n|'.join(data) + "\n"
+		wikicode += "|}"
+		r = s.get(api_url, params={
+			'action': 'query',
+			'format': 'json',
+			'meta': 'tokens',
+			'type': 'csrf'
+		})
+		token = r.json()['query']['tokens']['csrftoken']
+		payload = {
+			'action': 'edit',
+			'format': 'json',
+			'title': 'E-mailové adresy/seznam',
+			'text': wikicode,
+			'summary': 'Robot: Aktualizovan seznam existujicich e-mailovych uctu',
+			'token': token,
+		}
+		r = s.post(api_url, data=payload)
+		data = r.json()
 
 if __name__ == '__main__':
 	main()
