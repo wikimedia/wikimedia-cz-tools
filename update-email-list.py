@@ -87,6 +87,7 @@ def main():
 		token = r.json()['query']['tokens']['logintoken']
 		r = s.post(api_url, data={
 			'action': 'login',
+			'format': 'json',
 			'lgname': 'UrbanecmBot',
 			'lgpassword': 'AutoMailUpdater@rf1jpi3a9kfi70ukkr5qvmeucag6cmc6',
 			'lgtoken': token
