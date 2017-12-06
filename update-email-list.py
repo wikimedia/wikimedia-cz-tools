@@ -88,10 +88,9 @@ def main():
 		r = s.post(api_url, data={
 			'action': 'login',
 			'lgname': 'UrbanecmBot',
-			'lgpassword': 'secret',
+			'lgpassword': 'AutoMailUpdater@rf1jpi3a9kfi70ukkr5qvmeucag6cmc6',
 			'lgtoken': token
 		})
-		r.json() # Just to actually issue the request
 		# Generate list of accounts
 		wikicode = u"""== Schránky ==
 {| class="wikitable sortable"
