@@ -157,6 +157,7 @@ def main():
 			'format': 'json',
 			'title': 'E-mailové adresy/seznam',
 			'text': wikicode,
+			'bot': 'true',
 			'summary': 'Robot: Aktualizovan seznam existujicich e-mailovych uctu',
 			'token': token,
 		}
