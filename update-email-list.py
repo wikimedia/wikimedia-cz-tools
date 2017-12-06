@@ -105,17 +105,19 @@ def main():
 !Administrátor?
 !Pozastaven?
 """
+		print(json.dumps(users))
 		for user in users:
 			admin = "Ne"
 			if user['isAdmin']:
-				admin = "Ano"
+				admin = "Superadministrátor"
+			elif user['isDelegatedAdmin']:
+				admin = "Administrátor"
 			suspended = "Ne"
 			if user['suspended']:
 				suspended = "Ano"
 			aliasy = ""
 			for email in user['emails']:
-				if not email['primary']:
-					aliasy += email['address'] + '\n'
+				aliasy += email['address'] + '\n'
 			data = (u"|-", user['name']['givenName'], user['name']['familyName'], user['primaryEmail'], "", admin, suspended)
 			wikicode += '\n|'.join(data) + "\n"
 		wikicode += "|}"
