@@ -16,7 +16,7 @@ try:
 except ImportError:
 	flags = None
 
-SCOPES = 'https://www.googleapis.com/auth/admin.directory.user'
+SCOPES = 'https://www.googleapis.com/auth/admin.directory.user.readonly https://www.googleapis.com/auth/admin.directory.group.member.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Directory API Python Quickstart'
 
