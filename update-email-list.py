@@ -105,7 +105,6 @@ def main():
 !Administrátor?
 !Pozastaven?
 """
-		print(json.dumps(users))
 		for user in users:
 			admin = "Ne"
 			if user['isAdmin']:
