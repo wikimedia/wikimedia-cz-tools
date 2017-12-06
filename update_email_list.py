@@ -16,7 +16,7 @@ try:
 except ImportError:
 	flags = None
 
-SCOPES = 'https://www.googleapis.com/auth/admin.directory.user.readonly https://www.googleapis.com/auth/admin.directory.group.member.readonly'
+SCOPES = 'https://www.googleapis.com/auth/admin.directory.user.readonly https://www.googleapis.com/auth/admin.directory.group.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Directory API Python Quickstart'
 
@@ -119,6 +119,30 @@ def main():
 				aliasy += email['address'] + '\n'
 			data = (u"|-", user['name']['givenName'], user['name']['familyName'], user['primaryEmail'], "", admin, suspended)
 			wikicode += '\n|'.join(data) + "\n"
+		wikicode += u"|}\n\n=== Distribuční seznamy ===\n"
+		wikicode += u"""{| class="wikitable sortable"
+|+
+!E-mailová adresa
+!Členové
+"""
+		groups = service.groups().list(domain="wikimedia.cz").execute()['groups']
+		for group in groups:
+			id = group['id']
+			email = group['email']
+			members = "\n"
+			membersIterate = service.members().list(groupKey=id).execute()
+			if 'members' in membersIterate:
+				membersIterate = membersIterate['members']
+				for member in membersIterate:
+					role = member['role']
+					if role == "MEMBER":
+						role = u"člen"
+					elif role == "OWNER":
+						role = u"vlastník"
+					elif role == "MANAGER":
+						role = u"správce"
+					members += "* " + member['email'] + " (" + role + ")\n"
+			wikicode += "\n|".join(('|-', email, members)) + "\n"
 		wikicode += "|}"
 		r = s.get(api_url, params={
 			'action': 'query',
