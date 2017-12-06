@@ -95,7 +95,7 @@ def main():
 			'lgtoken': token
 		})
 		# Generate list of accounts
-		wikicode = u"""== Schránky ==
+		wikicode = u"""=== Schránky ===
 {| class="wikitable sortable"
 |+
 !Jméno
