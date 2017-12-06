@@ -101,10 +101,20 @@ def main():
 !Primární e-mail
 !Aliasy
 !Administrátor?
-!Aktivní?
+!Pozastaven?
 """
 		for user in users:
-			data = (u"|-", user['name']['givenName'], user['name']['familyName'], user['primaryEmail'], "", "", "")
+			admin = "Ne"
+			if user['isAdmin']:
+				admin = "Ano"
+			suspended = "Ne"
+			if user['suspended']:
+				suspended = "Ano"
+			aliasy = ""
+			for email in user['emails']:
+				if not email['primary']:
+					aliasy += email['address'] + '\n'
+			data = (u"|-", user['name']['givenName'], user['name']['familyName'], user['primaryEmail'], "", admin, suspended)
 			wikicode += '\n|'.join(data) + "\n"
 		wikicode += "|}"
 		r = s.get(api_url, params={
