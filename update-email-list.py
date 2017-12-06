@@ -109,9 +109,9 @@ def main():
 		for user in users:
 			admin = "Ne"
 			if user['isAdmin']:
-				admin = "Superadministrátor"
+				admin = u"Superadministrátor"
 			elif user['isDelegatedAdmin']:
-				admin = "Administrátor"
+				admin = u"Administrátor"
 			suspended = "Ne"
 			if user['suspended']:
 				suspended = "Ano"
