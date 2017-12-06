@@ -72,7 +72,7 @@ def main():
 	http = credentials.authorize(httplib2.Http())
 	service = discovery.build('admin', 'directory_v1', http=http)
 
-	results = service.users().list(customer='my_customer', maxResults=10, orderBy='familyName').execute()
+	results = service.users().list(customer='my_customer', orderBy='familyName').execute()
 	users = results.get('users', [])
 
 	if not users:
