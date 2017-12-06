@@ -32,8 +32,8 @@ from __future__ import absolute_import, unicode_literals
 # If you use either of these functions to define the family to work on by
 # default (the ‘family’ variable below), you must place the function call
 # before the definition of the ‘family’ variable.
-register_family_file('inner_wiki', 'inner_wiki_family.py')
-family = 'inner_wiki'
+register_families_folder('.')
+family = 'innerwiki'
 
 # The language code of the site we're working on.
 mylang = 'cs'
@@ -41,7 +41,7 @@ mylang = 'cs'
 # The dictionary usernames should contain a username for each site where you
 # have a bot account. If you have a unique username for all languages of a
 # family , you can use '*'
-usernames['inner_wiki']['*'] = u'UrbanecmBot'
+usernames['innerwiki']['*'] = u'UrbanecmBot'
 
 
 # ############# LOGFILE SETTINGS ##############
