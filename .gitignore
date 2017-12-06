@@ -1,3 +1,4 @@
 credentials
 venv
 config.json
+*.pyc
