@@ -78,7 +78,6 @@ def main():
 			data = (u"|-", user['name']['givenName'], user['name']['familyName'], user['primaryEmail'], "", "", "")
 			row = '\n|'.join(data) + "\n"
 			res += row
-			break
 		res += "|}"
 		print(res)
 
