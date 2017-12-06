@@ -83,7 +83,7 @@ def main():
 		r.json() # Just to actually issue the request
 		# Generate list of accounts
 		wikicode = u"""== Schránky ==
-{| class="wikitable"
+{| class="wikitable sortable"
 |+
 !Jméno
 !Příjmení
