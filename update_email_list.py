@@ -74,7 +74,7 @@ def main():
 	http = credentials.authorize(httplib2.Http())
 	service = discovery.build('admin', 'directory_v1', http=http)
 
-	results = service.users().list(customer='my_customer', orderBy='familyName').execute()
+	results = service.users().list(customer='my_customer', orderBy='familyName', projection="full").execute()
 	users = results.get('users', [])
 
 	if not users:
@@ -104,6 +104,7 @@ def main():
 !Aliasy
 !Administrátor?
 !Pozastaven?
+!Poznámka
 """
 		for user in users:
 			admin = "Ne"
@@ -118,7 +119,11 @@ def main():
 			for email in user['emails']:
 				if 'primary' not in email:
 					aliasy += '* ' + email['address'] + '\n'
-			data = (u"|-", user['name']['givenName'], user['name']['familyName'], user['primaryEmail'], aliasy, admin, suspended)
+			try:
+				note = user['customSchemas']['Ostatn']['Poznmka']
+			except:
+				note = ""
+			data = (u"|-", user['name']['givenName'], user['name']['familyName'], user['primaryEmail'], aliasy, admin, suspended, note)
 			wikicode += '\n|'.join(data) + "\n"
 		wikicode += u"|}\n\n=== Distribuční seznamy ===\n"
 		wikicode += u"""{| class="wikitable sortable"
