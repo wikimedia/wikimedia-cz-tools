@@ -16,7 +16,7 @@ try:
 except ImportError:
 	flags = None
 
-SCOPES = 'https://www.googleapis.com/auth/admin.directory.user.readonly https://www.googleapis.com/auth/admin.directory.group.readonly'
+SCOPES = 'https://www.googleapis.com/auth/admin.directory.user.readonly https://www.googleapis.com/auth/admin.directory.group.readonly https://www.googleapis.com/auth/admin.directory.rolemanagement.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Directory API Python Quickstart'
 
@@ -94,6 +94,21 @@ def main():
 			'lgpassword': config['password'],
 			'lgtoken': token
 		})
+		# Fetch all existing roles and roles assignments
+		results = service.roles().list(customer='my_customer').execute()
+		roles = results.get('items', [])
+		rolesHuman = {}
+		for role in roles:
+			rolesHuman[role['roleId']] = role['roleDescription']
+		results = service.roleAssignments().list(customer='my_customer').execute()
+		rolesAssignments = results.get('items', [])
+		# Translate it into rozumejsi format
+		tmp = {}
+		for roleAssignment in rolesAssignments:
+			if roleAssignment['assignedTo'] not in tmp:
+				tmp[roleAssignment['assignedTo']] = []
+			tmp[roleAssignment['assignedTo']].append(rolesHuman[roleAssignment['roleId']])
+		roles = tmp
 		# Generate list of accounts
 		wikicode = u"""=== Schránky ===
 {| class="wikitable sortable"
@@ -110,9 +125,11 @@ def main():
 		for user in users:
 			admin = "Ne"
 			if user['isAdmin']:
-				admin = u"Superadministrátor"
+				admin = u"\n* Superadministrátor\n"
 			elif user['isDelegatedAdmin']:
-				admin = u"Administrátor"
+				admin = u"\n"
+				for role in roles[user['id']]:
+					admin += u"* " + role + '\n'
 			suspended = "Ne"
 			if user['suspended']:
 				suspended = "Ano"
