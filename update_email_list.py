@@ -150,6 +150,7 @@ def main():
 		wikicode += u"""{| class="wikitable sortable"
 |+
 !E-mailová adresa
+!Aliasy
 !Členové
 """
 		groups = service.groups().list(domain="wikimedia.cz").execute()['groups']
@@ -157,6 +158,10 @@ def main():
 			id = group['id']
 			email = group['email']
 			members = "\n"
+			aliases = "\n"
+			if 'aliases' in group:
+				for alias in group['aliases']:
+					aliases += "* " + alias + "\n"
 			membersIterate = service.members().list(groupKey=id).execute()
 			if 'members' in membersIterate:
 				membersIterate = membersIterate['members']
@@ -169,7 +174,7 @@ def main():
 					elif role == "MANAGER":
 						role = u"správce"
 					members += "* " + member['email'] + " (" + role + ")\n"
-			wikicode += "\n|".join(('|-', email, members)) + "\n"
+			wikicode += "\n|".join(('|-', email, aliases, members)) + "\n"
 		wikicode += "|}"
 		r = s.get(api_url, params={
 			'action': 'query',
