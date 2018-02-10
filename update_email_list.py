@@ -149,6 +149,7 @@ def main():
 		wikicode += u"|}\n\n=== Distribuční seznamy ===\n"
 		wikicode += u"""{| class="wikitable sortable"
 |+
+!Jméno
 !E-mailová adresa
 !Aliasy
 !Členové
@@ -174,7 +175,7 @@ def main():
 					elif role == "MANAGER":
 						role = u"správce"
 					members += "* " + member['email'] + " (" + role + ")\n"
-			wikicode += "\n|".join(('|-', email, aliases, members)) + "\n"
+			wikicode += "\n|".join(('|-', group['name'], email, aliases, members)) + "\n"
 		wikicode += "|}"
 		r = s.get(api_url, params={
 			'action': 'query',
