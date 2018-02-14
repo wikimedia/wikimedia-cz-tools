@@ -119,7 +119,6 @@ def main():
 !Aliasy
 !Administrátor?
 !Pozastaven?
-!Aktivován?
 !Poznámka
 """
 		for user in users:
@@ -133,9 +132,6 @@ def main():
 			suspended = "Ne"
 			if user['suspended']:
 				suspended = "Ano"
-			activated = "Ne"
-			if user['agreedToTerms']:
-				activated = "Ano"
 			aliasy = "\n"
 			for email in user['emails']:
 				if 'primary' not in email:
@@ -144,7 +140,7 @@ def main():
 				note = user['customSchemas']['Ostatn']['Poznmka']
 			except:
 				note = ""
-			data = (u"|-", user['name']['givenName'], user['name']['familyName'], user['primaryEmail'], aliasy, admin, suspended, activated, note)
+			data = (u"|-", user['name']['givenName'], user['name']['familyName'], user['primaryEmail'], aliasy, admin, suspended, note)
 			wikicode += '\n|'.join(data) + "\n"
 		wikicode += u"|}\n\n=== Distribuční seznamy ===\n"
 		wikicode += u"""{| class="wikitable sortable"
