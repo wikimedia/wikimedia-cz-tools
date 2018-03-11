@@ -151,7 +151,7 @@ def main():
 !Aliasy
 !Členové
 """
-		groups = service.groups().list(domain="wikimedia.cz").execute()['groups']
+		groups = service.groups().list(customer="my_customer").execute()['groups']
 		for group in groups:
 			id = group['id']
 			email = group['email']
