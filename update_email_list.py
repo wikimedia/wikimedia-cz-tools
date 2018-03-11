@@ -119,6 +119,7 @@ def main():
 !Aliasy
 !Administrátor?
 !Pozastaven?
+!Organizační jednotka
 !Poznámka
 """
 		for user in users:
@@ -140,7 +141,7 @@ def main():
 				note = user['customSchemas']['Ostatn']['Poznmka']
 			except:
 				note = ""
-			data = (u"|-", user['name']['givenName'], user['name']['familyName'], user['primaryEmail'], aliasy, admin, suspended, note)
+			data = (u"|-", user['name']['givenName'], user['name']['familyName'], user['primaryEmail'], aliasy, admin, suspended, user['orgUnitPath'], note)
 			wikicode += '\n|'.join(data) + "\n"
 		wikicode += u"|}\n\n=== Distribuční seznamy ===\n"
 		wikicode += u"""{| class="wikitable sortable"
