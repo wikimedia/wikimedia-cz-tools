@@ -171,7 +171,8 @@ def main():
 						role = u"vlastník"
 					elif role == "MANAGER":
 						role = u"správce"
-					members += "* " + member['email'] + " (" + role + ")\n"
+					if 'email' in member:
+						members += "* " + member['email'] + " (" + role + ")\n"
 			wikicode += "\n|".join(('|-', group['name'], email, aliases, members)) + "\n"
 		wikicode += "|}"
 		r = s.get(api_url, params={
