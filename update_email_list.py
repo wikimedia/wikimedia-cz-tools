@@ -55,17 +55,6 @@ def get_credentials():
 		print('Storing credentials to ' + credential_path)
 	return credentials
 
-def getNoteFromTable(table, mail):
-	table = table.replace('\n', '').replace('| ', '|').replace('|}', '')
-	rows = table.split('|-')
-	rows.pop(0)
-	for row in rows:
-		row = row.replace('| ', '|').split('|')
-		row.pop(0)
-		if row[2] == mail:
-			return row[-1]
-	return ''
-
 def main():
 	"""
 	Updates list of existing e-mail addresses at all domains at wiki.wikimedia.cz.
