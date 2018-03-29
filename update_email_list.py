@@ -206,6 +206,13 @@ def main():
 		}
 		r = s.post(api_url, data=payload)
 		data = r.json()
+		payload = {
+			"action": "purge",
+			"format": "json",
+			"titles": "E-mailové adresy"
+		}
+		r = s.post(api_url, data=payload)
+		data = r.json()
 
 if __name__ == '__main__':
 	main()
