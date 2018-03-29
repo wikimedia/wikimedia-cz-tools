@@ -99,7 +99,20 @@ def main():
 		roles = results.get('items', [])
 		rolesHuman = {}
 		for role in roles:
-			rolesHuman[role['roleId']] = role['roleDescription']
+			role_name = role['roleName']
+			if role_name == "_SEED_ADMIN_ROLE":
+				role_name = u"Google Apps Administrator Seed Role"
+			elif role_name == "_GROUPS_ADMIN_ROLE":
+				role_name = u"Administrátor skupin"
+			elif role_name == u"_USER_MANAGEMENT_ADMIN_ROLE":
+				role_name = u"Administrátor uživatelů"
+			elif role_name == "_HELP_DESK_ADMIN_ROLE":
+				role_name = u"Administrátor technické podpory"
+			elif role_name == "_SERVICE_ADMIN_ROLE":
+				role_name = u"Administrátor služeb"
+			elif role_name == "_PLAY_FOR_WORK_ADMIN_ROLE":
+				role_name = u"Administrátor služby Play for Work"
+			rolesHuman[role['roleId']] = role_name
 		results = service.roleAssignments().list(customer='my_customer').execute()
 		rolesAssignments = results.get('items', [])
 		# Translate it into rozumejsi format
@@ -129,7 +142,7 @@ def main():
 			elif user['isDelegatedAdmin']:
 				admin = u"\n"
 				for role in roles[user['id']]:
-					admin += u"* " + role + '\n'
+					admin += u"* " + role + u'\n'
 			suspended = "Ne"
 			if user['suspended']:
 				suspended = "Ano"
