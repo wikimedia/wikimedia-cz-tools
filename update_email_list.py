@@ -149,6 +149,7 @@ def main():
 		wikicode += u"""{| class="wikitable sortable"
 |+
 !Jméno
+!Popis
 !E-mailová adresa
 !Aliasy
 !Členové
@@ -157,6 +158,7 @@ def main():
 		for group in groups:
 			id = group['id']
 			email = group['email']
+			description = 'style="width: 10%;" |\n' + group['description']
 			if email == u"ucitele_ucebna@wikimedia.cz":
 				continue
 			members = "\n"
@@ -177,7 +179,7 @@ def main():
 						role = u"správce"
 					if 'email' in member:
 						members += "* " + member['email'] + " (" + role + ")\n"
-			wikicode += "\n|".join(('|-', group['name'], email, aliases, members)) + "\n"
+			wikicode += "\n|".join(('|-', group['name'], description, email, aliases, members)) + "\n"
 		wikicode += "|}"
 		r = s.get(api_url, params={
 			'action': 'query',
