@@ -157,6 +157,8 @@ def main():
 		for group in groups:
 			id = group['id']
 			email = group['email']
+			if email == u"ucitele_ucebna@wikimedia.cz":
+				continue
 			members = "\n"
 			aliases = "\n"
 			if 'aliases' in group:
