@@ -17,8 +17,8 @@ except ImportError:
 	flags = None
 
 SCOPES = 'https://www.googleapis.com/auth/admin.directory.user.readonly https://www.googleapis.com/auth/admin.directory.group.readonly https://www.googleapis.com/auth/admin.directory.rolemanagement.readonly'
-CLIENT_SECRET_FILE = 'client_secret.json'
-APPLICATION_NAME = 'Directory API Python Quickstart'
+CLIENT_SECRET_FILE = '../client_secret.json'
+APPLICATION_NAME = 'Update intranet with email list'
 
 s = requests.Session()
 base_url = 'https://wiki.wikimedia.cz'
@@ -37,11 +37,10 @@ def get_credentials():
 	Returns:
 		Credentials, the obtained credential.
 	"""
-	credential_dir = 'credentials'
+	credential_dir = '../credentials'
 	if not os.path.exists(credential_dir):
 		os.makedirs(credential_dir)
-	credential_path = os.path.join(credential_dir,
-								   'admin-directory_v1-python-quickstart.json')
+	credential_path = os.path.join(credential_dir, 'update_email_list.json')
 
 	store = Storage(credential_path)
 	credentials = store.get()
