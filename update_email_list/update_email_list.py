@@ -177,6 +177,11 @@ def main():
 					if 'email' in member:
 						members += "* " + member['email'] + " (" + role + ")\n"
 			wikicode += "\n|".join(('|-', group['name'], email, aliases, members)) + "\n"
+		email = u"wikimediacz-l@lists.wikimedia.org"
+		name = u"Všichni členové"
+		members = "\n"
+		aliases = "\n"
+		wikicode += "\n|".join(('|-', name, email, aliases, members)) + "\n"
 		wikicode += "|}"
 		r = s.get(api_url, params={
 			'action': 'query',
