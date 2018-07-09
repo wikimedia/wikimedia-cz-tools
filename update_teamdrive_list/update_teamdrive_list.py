@@ -90,7 +90,7 @@ def main():
 		"""
 		for teamDrive in teamDrives:
 			permissions = service.permissions().list(useDomainAdminAccess=True, supportsTeamDrives=True, fileId=teamDrive['id']).execute().get('items')
-			description = config.get('teamDrives', {}).get(teamDrive['id'], {}).get('description', 'Pro přidání popisku kontaktujte Martina Urbance.')
+			description = config.get('teamDrives', {}).get(teamDrive['id'], {}).get('description', u'Pro přidání popisku kontaktujte Martina Urbance.')
 			if permissions:
 				permissions_wikitext = u""
 				for permission in permissions:
