@@ -60,13 +60,13 @@ def main():
 	"""
 	credentials = get_credentials()
 	http = credentials.authorize(httplib2.Http())
-	service = discovery.build('drive', 'v3', http=http)
+	service = discovery.build('drive', 'v2', http=http)
 
-	results = service.users().list(customer='my_customer', orderBy='familyName', projection="full").execute()
-	users = results.get('users', [])
+	results = service.teamdrives().list(useDomainAdminAccess=True).execute()
+	teamDrives = results.get('items', [])
 
-	if not users:
-		print('No users in the domain.')
+	if not teamDrives:
+		print('No TeamDrives in the domain.')
 	else:
 		r = s.get(api_url, params={
 			'action': 'query',
@@ -74,6 +74,56 @@ def main():
 			'type': 'login',
 			'format': 'json',
 		})
+		token = r.json()['query']['tokens']['logintoken']
+		r = s.post(api_url, data={
+			'action': 'login',
+			'format': 'json',
+			'lgname': config['username'],
+			'lgpassword': config['password'],
+			'lgtoken': token
+		})
+		wikitext = u"""== Seznam týmových disků ==
+<!-- Tento seznam je pravidelně aktualizován robotem; prosím, needitujte tuto sekci ručně, v opačném případě budou vaše změny při příští aktualizaci přepsány -->
+{| class="wikitable"
+|-
+! Název !! Popis !! Má přístup
+		"""
+		for teamDrive in teamDrives:
+			permissions = service.permissions().list(useDomainAdminAccess=True, supportsTeamDrives=True, fileId=teamDrive['id']).execute().get('items')
+			description = config.get('teamDrives', {}).get(teamDrive['id'], {}).get('description', 'Pro přidání popisku kontaktujte Martina Urbance.')
+			if permissions:
+				permissions_wikitext = u""
+				for permission in permissions:
+					permission_type = permission.get('role')
+					permission_type_human = "unidentified"
+					if permission_type == "reader":
+						permission_type_human = u"náhled"
+						# TODO: Support commenter
+					elif permission_type == "writer":
+						permission_type_human = u"úpravy"
+					elif permission_type == "organizer":
+						permission_type_human = u"plný"
+					permissions_wikitext += u"* %s <%s> (%s)\n" % (permission.get('name', 'Beze Jména'), permission.get('emailAddress', 'None'), permission_type_human)
+				wikitext += "|-\n| %s || %s || \n%s" % (teamDrive['name'], description, permissions_wikitext)
+		wikitext += "|}"
+		r = s.get(api_url, params={
+			'action': 'query',
+			'format': 'json',
+			'meta': 'tokens',
+			'type': 'csrf'
+		})
+		token = r.json()['query']['tokens']['csrftoken']
+		payload = {
+			'action': 'edit',
+			'format': 'json',
+			'title': 'G Suite/Týmový disk',
+			'section': 1,
+			'text': wikitext,
+			'bot': 'true',
+			'summary': 'Robot: Aktualizovan seznam existujicich tymovych disku',
+			'token': token,
+		}
+		r = s.post(api_url, data=payload)
 
 
 if __name__ == '__main__':
