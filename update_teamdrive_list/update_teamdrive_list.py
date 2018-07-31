@@ -120,6 +120,7 @@ def main():
 			'section': 1,
 			'text': wikitext,
 			'bot': 'true',
+			'minor': 'true',
 			'summary': 'Robot: Aktualizovan seznam existujicich tymovych disku',
 			'token': token,
 		}
