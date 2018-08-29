@@ -34,7 +34,7 @@ def get_credentials():
 	credential_dir = '../credentials'
 	if not os.path.exists(credential_dir):
 		os.makedirs(credential_dir)
-	credential_path = os.path.join(credential_dir, 'update_email_list.json')
+	credential_path = os.path.join(credential_dir, 'update_tracker_users.json')
 
 	store = Storage(credential_path)
 	credentials = store.get()
