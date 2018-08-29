@@ -136,7 +136,7 @@ def main():
 				suspended = "Ano"
 			aliasy = "\n"
 			for email in user['emails']:
-				if 'primary' not in email:
+				if 'primary' not in email and 'type' not in email:
 					aliasy += '* ' + email['address'] + '\n'
 			try:
 				note = user['customSchemas']['Ostatn']['Poznmka']
