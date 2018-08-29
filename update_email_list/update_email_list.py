@@ -163,19 +163,22 @@ def main():
 			if 'aliases' in group:
 				for alias in group['aliases']:
 					aliases += "* " + alias + "\n"
-			membersIterate = service.members().list(groupKey=id).execute()
-			if 'members' in membersIterate:
-				membersIterate = membersIterate['members']
-				for member in membersIterate:
-					role = member['role']
-					if role == "MEMBER":
-						role = u"člen"
-					elif role == "OWNER":
-						role = u"vlastník"
-					elif role == "MANAGER":
-						role = u"správce"
-					if 'email' in member:
-						members += "* " + member['email'] + " (" + role + ")\n"
+			if email == u"tracker-users@wikimedia.cz":
+				members += u"Všichni registrovaní uživatelé Trackeru, celý seznam je neveřejný.\n"
+			else:
+				membersIterate = service.members().list(groupKey=id).execute()
+				if 'members' in membersIterate:
+					membersIterate = membersIterate['members']
+					for member in membersIterate:
+						role = member['role']
+						if role == "MEMBER":
+							role = u"člen"
+						elif role == "OWNER":
+							role = u"vlastník"
+						elif role == "MANAGER":
+							role = u"správce"
+						if 'email' in member:
+							members += "* " + member['email'] + " (" + role + ")\n"
 			wikicode += "\n|".join(('|-', group['name'], email, aliases, members)) + "\n"
 		email = u"wikimediacz-l@lists.wikimedia.org"
 		name = u"Všichni členové"
