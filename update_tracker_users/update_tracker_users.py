@@ -67,7 +67,7 @@ def main():
 	tracker_mails = []
 	conn = connect()
 	with conn.cursor() as cur:
-		cur.execute('select email from auth_user where email!="";')
+		cur.execute('select distinct email from auth_user where email!="";')
 		data = cur.fetchall()
 	for row in data: tracker_mails.append(row[0])
 
@@ -81,7 +81,10 @@ def main():
 			tracker_mails.remove(member["email"])
 	for mail in tracker_mails:
 		print("Adding %s" % mail)
-		service.members().insert(groupKey=config["groupId"], body={"email": mail}).execute()
+		try:
+			service.members().insert(groupKey=config["groupId"], body={"email": mail}).execute()
+		except:
+			pass
 
 
 if __name__ == '__main__':
