@@ -82,6 +82,15 @@ def main():
 			'lgpassword': config['password'],
 			'lgtoken': token
 		})
+		r = s.get(api_url, params={
+			"action": "query",
+			"format": "json",
+			"prop": "revisions",
+			"titles": "G Suite/Týmový disk.json",
+			"rvprop": "content"
+		})
+		data = r.json()["query"]["pages"]
+		config['teamDrives'] = json.loads(data[data.keys()[0]]["revisions"][0]['*'])
 		wikitext = u"""== Seznam týmových disků ==
 <!-- Tento seznam je pravidelně aktualizován robotem; prosím, needitujte tuto sekci ručně, v opačném případě budou vaše změny při příští aktualizaci přepsány -->
 {| class="wikitable"
@@ -90,7 +99,7 @@ def main():
 		"""
 		for teamDrive in teamDrives:
 			permissions = service.permissions().list(useDomainAdminAccess=True, supportsTeamDrives=True, fileId=teamDrive['id']).execute().get('items')
-			description = config.get('teamDrives', {}).get(teamDrive['id'], {}).get('description', 'Pro přidání popisku kontaktujte Martina Urbance.')
+			description = config.get('teamDrives', {}).get(teamDrive['id'], {}).get('description', u'Pro přidání popisku kontaktujte Martina Urbance.')
 			if permissions:
 				permissions_wikitext = u""
 				for permission in permissions:
@@ -120,6 +129,7 @@ def main():
 			'section': 1,
 			'text': wikitext,
 			'bot': 'true',
+			'minor': 'true',
 			'summary': 'Robot: Aktualizovan seznam existujicich tymovych disku',
 			'token': token,
 		}
