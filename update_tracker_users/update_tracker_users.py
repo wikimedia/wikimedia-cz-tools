@@ -67,7 +67,7 @@ def main():
 	tracker_mails = []
 	conn = connect()
 	with conn.cursor() as cur:
-		cur.execute('select distinct email from auth_user where email!="";')
+		cur.execute('select distinct email from auth_user where email!="" and is_active=1;')
 		data = cur.fetchall()
 	for row in data: tracker_mails.append(row[0])
 
