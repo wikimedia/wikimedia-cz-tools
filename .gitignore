@@ -1,5 +1,6 @@
 credentials
 client_secret.json
+service_account.json
 venv
 config.json
 *.pyc
