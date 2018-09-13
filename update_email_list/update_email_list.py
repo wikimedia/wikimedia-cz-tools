@@ -189,6 +189,7 @@ def main():
 			'token': token,
 		}
 		r = s.post(api_url, data=payload)
+		all_members = {}
 		for group in groups:
 			id = group['id']
 			email = group['email']
@@ -203,6 +204,7 @@ def main():
 				members += u"Všichni registrovaní uživatelé Trackeru, celý seznam je neveřejný.\n"
 			else:
 				membersIterate = service.members().list(groupKey=id).execute()
+				all_members[group['id']] = membersIterate
 				if 'members' in membersIterate:
 					membersIterate = membersIterate['members']
 					for member in membersIterate:
@@ -222,6 +224,24 @@ def main():
 		aliases = "\n"
 		wikicode += "\n|".join(('|-', name, email, aliases, members)) + "\n"
 		wikicode += "|}"
+		r = s.get(api_url, params={
+			'action': 'query',
+			'format': 'json',
+			'meta': 'tokens',
+			'type': 'csrf'
+		})
+		token = r.json()['query']['tokens']['csrftoken']
+		payload = {
+			'action': 'edit',
+			'format': 'json',
+			'title': 'E-mailové adresy/members.json',
+			'text': json.dumps(all_members),
+			'bot': 'true',
+			'minor': 'true',
+			'summary': 'Robot: Aktualizovan seznam clenu existujicich Google skupin',
+			'token': token,
+		}
+		r = s.post(api_url, data=payload)
 		r = s.get(api_url, params={
 			'action': 'query',
 			'format': 'json',
