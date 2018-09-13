@@ -82,6 +82,24 @@ def main():
 			'lgpassword': config['password'],
 			'lgtoken': token
 		})
+		r = s.get(api_url, params={
+			'action': 'query',
+			'format': 'json',
+			'meta': 'tokens',
+			'type': 'csrf'
+		})
+		token = r.json()['query']['tokens']['csrftoken']
+		payload = {
+			'action': 'edit',
+			'format': 'json',
+			'title': 'E-mailové adresy/users.json',
+			'text': str(users),
+			'bot': 'true',
+			'minor': 'true',
+			'summary': 'Robot: Aktualizovan seznam existujicich Google ucctu',
+			'token': token,
+		}
+		r = s.post(api_url, data=payload)
 		# Fetch all existing roles and roles assignments
 		results = service.roles().list(customer='my_customer').execute()
 		roles = results.get('items', [])
@@ -153,6 +171,24 @@ def main():
 !Členové
 """
 		groups = service.groups().list(customer="my_customer").execute()['groups']
+		r = s.get(api_url, params={
+			'action': 'query',
+			'format': 'json',
+			'meta': 'tokens',
+			'type': 'csrf'
+		})
+		token = r.json()['query']['tokens']['csrftoken']
+		payload = {
+			'action': 'edit',
+			'format': 'json',
+			'title': 'E-mailové adresy/groups.json',
+			'text': str(groups),
+			'bot': 'true',
+			'minor': 'true',
+			'summary': 'Robot: Aktualizovan seznam existujicich Google skupin',
+			'token': token,
+		}
+		r = s.post(api_url, data=payload)
 		for group in groups:
 			id = group['id']
 			email = group['email']
