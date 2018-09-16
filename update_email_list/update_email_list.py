@@ -62,7 +62,7 @@ def main():
 	http = credentials.authorize(httplib2.Http())
 	service = discovery.build('admin', 'directory_v1', http=http)
 
-	results = service.users().list(customer='my_customer', orderBy='familyName', projection="full").execute()
+	results = service.users().list(customer='my_customer', orderBy='givenName', projection="full").execute()
 	users = results.get('users', [])
 
 	if not users:
@@ -82,6 +82,24 @@ def main():
 			'lgpassword': config['password'],
 			'lgtoken': token
 		})
+		r = s.get(api_url, params={
+			'action': 'query',
+			'format': 'json',
+			'meta': 'tokens',
+			'type': 'csrf'
+		})
+		token = r.json()['query']['tokens']['csrftoken']
+		payload = {
+			'action': 'edit',
+			'format': 'json',
+			'title': 'E-mailové adresy/users.json',
+			'text': json.dumps(users),
+			'bot': 'true',
+			'minor': 'true',
+			'summary': 'Robot: Aktualizovan seznam existujicich Google ucctu',
+			'token': token,
+		}
+		r = s.post(api_url, data=payload)
 		# Fetch all existing roles and roles assignments
 		results = service.roles().list(customer='my_customer').execute()
 		roles = results.get('items', [])
@@ -136,7 +154,7 @@ def main():
 				suspended = "Ano"
 			aliasy = "\n"
 			for email in user['emails']:
-				if 'primary' not in email:
+				if 'primary' not in email and 'type' not in email:
 					aliasy += '* ' + email['address'] + '\n'
 			try:
 				note = user['customSchemas']['Ostatn']['Poznmka']
@@ -153,6 +171,25 @@ def main():
 !Členové
 """
 		groups = service.groups().list(customer="my_customer").execute()['groups']
+		r = s.get(api_url, params={
+			'action': 'query',
+			'format': 'json',
+			'meta': 'tokens',
+			'type': 'csrf'
+		})
+		token = r.json()['query']['tokens']['csrftoken']
+		payload = {
+			'action': 'edit',
+			'format': 'json',
+			'title': 'E-mailové adresy/groups.json',
+			'text': json.dumps(groups),
+			'bot': 'true',
+			'minor': 'true',
+			'summary': 'Robot: Aktualizovan seznam existujicich Google skupin',
+			'token': token,
+		}
+		r = s.post(api_url, data=payload)
+		all_members = {}
 		for group in groups:
 			id = group['id']
 			email = group['email']
@@ -163,19 +200,23 @@ def main():
 			if 'aliases' in group:
 				for alias in group['aliases']:
 					aliases += "* " + alias + "\n"
-			membersIterate = service.members().list(groupKey=id).execute()
-			if 'members' in membersIterate:
-				membersIterate = membersIterate['members']
-				for member in membersIterate:
-					role = member['role']
-					if role == "MEMBER":
-						role = u"člen"
-					elif role == "OWNER":
-						role = u"vlastník"
-					elif role == "MANAGER":
-						role = u"správce"
-					if 'email' in member:
-						members += "* " + member['email'] + " (" + role + ")\n"
+			if email == u"tracker-users@wikimedia.cz":
+				members += u"Všichni registrovaní uživatelé Trackeru, celý seznam je neveřejný.\n"
+			else:
+				membersIterate = service.members().list(groupKey=id).execute()
+				all_members[group['id']] = membersIterate
+				if 'members' in membersIterate:
+					membersIterate = membersIterate['members']
+					for member in membersIterate:
+						role = member['role']
+						if role == "MEMBER":
+							role = u"člen"
+						elif role == "OWNER":
+							role = u"vlastník"
+						elif role == "MANAGER":
+							role = u"správce"
+						if 'email' in member:
+							members += "* " + member['email'] + " (" + role + ")\n"
 			wikicode += "\n|".join(('|-', group['name'], email, aliases, members)) + "\n"
 		email = u"wikimediacz-l@lists.wikimedia.org"
 		name = u"Všichni členové"
@@ -183,6 +224,24 @@ def main():
 		aliases = "\n"
 		wikicode += "\n|".join(('|-', name, email, aliases, members)) + "\n"
 		wikicode += "|}"
+		r = s.get(api_url, params={
+			'action': 'query',
+			'format': 'json',
+			'meta': 'tokens',
+			'type': 'csrf'
+		})
+		token = r.json()['query']['tokens']['csrftoken']
+		payload = {
+			'action': 'edit',
+			'format': 'json',
+			'title': 'E-mailové adresy/members.json',
+			'text': json.dumps(all_members),
+			'bot': 'true',
+			'minor': 'true',
+			'summary': 'Robot: Aktualizovan seznam clenu existujicich Google skupin',
+			'token': token,
+		}
+		r = s.post(api_url, data=payload)
 		r = s.get(api_url, params={
 			'action': 'query',
 			'format': 'json',
