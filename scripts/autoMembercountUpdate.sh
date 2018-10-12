@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pocetRadnychClenu=$(echo 'select count(*) from user where user_name not in (select ipb_address from ipblocks) and user_id not in (select ug_user from user_groups where ug_group in ("bot", "techaccount"));' | mysql --defaults-extra-file=~/.sqlconf/inner_wiki.conf wikiusers | sed 1d)
+pocetRadnychClenu=$(echo 'select count(*) from user where user_name not in (select ipb_address from ipblocks) and user_id not in (select ug_user from user_groups where ug_group in ("bot", "techaccount"));' | mysql wikiusers | sed 1d)
 
 # Get things from wiki
 pocetSymClenu=$(php /var/www/wiki.wikimedia.cz/mw/maintenance/getText.php --wiki=inner_wiki "Členové/Počet sympatizujících členů")
