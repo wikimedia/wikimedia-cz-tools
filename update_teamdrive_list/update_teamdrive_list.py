@@ -97,9 +97,17 @@ def main():
 |-
 ! Název !! Popis !! Má přístup
 		"""
+		if config.get('teamDrives') is None:
+			config['teamDrives'] = {}
 		for teamDrive in teamDrives:
 			permissions = service.permissions().list(useDomainAdminAccess=True, supportsTeamDrives=True, fileId=teamDrive['id']).execute().get('items')
-			description = config.get('teamDrives', {}).get(teamDrive['id'], {}).get('description', u'Pro přidání popisku kontaktujte Martina Urbance.')
+			description = config.get('teamDrives', {}).get(teamDrive['id'], {}).get('description')
+			if description is None:
+				description = u"Pro přidání popisku kontaktujte Martina Urbance <!-- jméno %s -->" % teamDrive["name"]
+				if config['teamDrives'] is not None:
+					if config['teamDrives'].get(teamDrive['id']) is None:
+						config['teamDrives'][teamDrive['id']] = {}
+					config['teamDrives'][teamDrive['id']]['description'] = description
 			if permissions:
 				permissions_wikitext = u""
 				for permission in permissions:
@@ -135,6 +143,11 @@ def main():
 			'summary': 'Robot: Aktualizovan seznam existujicich tymovych disku',
 			'token': token,
 		}
+		r = s.post(api_url, data=payload)
+		payload['title'] = u"G Suite/Týmový disk.json"
+		payload['summary'] = "Robot: Aktualizovana konfigurace"
+		payload['text'] = json.dumps(config['teamDrives'])
+		del(payload['section'])
 		r = s.post(api_url, data=payload)
 
 
