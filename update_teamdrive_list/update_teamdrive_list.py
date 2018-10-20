@@ -110,6 +110,8 @@ def main():
 						# TODO: Support commenter
 					elif permission_type == "writer":
 						permission_type_human = u"úpravy"
+					elif permission_type == "fileOrganizer":
+						permission_type_human = u"správce obsahu"
 					elif permission_type == "organizer":
 						permission_type_human = u"plný"
 					permissions_wikitext += u"* %s <%s> (%s)\n" % (permission.get('name', 'Beze Jména'), permission.get('emailAddress', 'None'), permission_type_human)
