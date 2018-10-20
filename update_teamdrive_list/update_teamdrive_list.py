@@ -117,11 +117,11 @@ def main():
 						permission_type_human = u"náhled"
 						# TODO: Support commenter
 					elif permission_type == "writer":
-						permission_type_human = u"úpravy"
+						permission_type_human = u"přispěvovatel"
 					elif permission_type == "fileOrganizer":
 						permission_type_human = u"správce obsahu"
 					elif permission_type == "organizer":
-						permission_type_human = u"plný"
+						permission_type_human = u"správce"
 					permissions_wikitext += u"* %s <%s> (%s)\n" % (permission.get('name', 'Beze Jména'), permission.get('emailAddress', 'None'), permission_type_human)
 				wikitext += "|-\n| %s || %s || \n%s" % (teamDrive['name'], description, permissions_wikitext)
 		wikitext += "|}"
