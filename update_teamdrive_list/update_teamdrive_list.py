@@ -90,7 +90,7 @@ def main():
 			"rvprop": "content"
 		})
 		data = r.json()["query"]["pages"]
-		config['teamDrives'] = json.loads(data[data.keys()[0]]["revisions"][0]['*'])
+		config['teamDrives'] = json.loads(data[list(data.keys())[0]]["revisions"][0]['*'])
 		wikitext = u"""== Seznam týmových disků ==
 <!-- Tento seznam je pravidelně aktualizován robotem; prosím, needitujte tuto sekci ručně, v opačném případě budou vaše změny při příští aktualizaci přepsány -->
 {| class="wikitable"
