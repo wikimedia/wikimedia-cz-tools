@@ -82,6 +82,18 @@ def main():
 			'lgpassword': config['password'],
 			'lgtoken': token
 		})
+		# Fetch data from wiki
+		r = s.get(api_url, params={
+			"action": "query",
+			"format": "json",
+			"prop": "revisions",
+			"titles": "E-mailové adresy/extra.json",
+			"rvprop": "content"
+		})
+		data = r.json()["query"]["pages"]
+		data = json.loads(data[list(data.keys())[0]]["revisions"][0]['*'])
+		extra_users = data["users"]
+		extra_groups = data["groups"]
 		# Fetch all existing roles and roles assignments
 		results = service.roles().list(customer='my_customer').execute()
 		roles = results.get('items', [])
@@ -144,6 +156,11 @@ def main():
 				note = ""
 			data = (u"|-", user['name']['givenName'], user['name']['familyName'], user['primaryEmail'], aliasy, admin, suspended, user['orgUnitPath'], note)
 			wikicode += '\n|'.join(data) + "\n"
+		for extra_user in extra_users:
+			aliases = "\n"
+			for alias in extra_user['aliases']:
+				aliases += "* " + alias + "\n"
+			wikicode += '\n|'.join((extra_user["givenName"], extra_user["familyName"], extra_user["email"], aliases, "Ne", "Ne", "/Extra", extra_user["note"])) + "\n"
 		wikicode += u"|}\n\n=== Distribuční seznamy ===\n"
 		wikicode += u"""{| class="wikitable sortable"
 |+
@@ -182,11 +199,11 @@ def main():
 						if 'email' in member:
 							members += "* " + member['email'] + " (" + role + ")\n"
 			wikicode += "\n|".join(('|-', group['name'], email, aliases, members)) + "\n"
-		email = u"wikimediacz-l@lists.wikimedia.org"
-		name = u"Všichni členové"
-		members = "\n"
-		aliases = "\n"
-		wikicode += "\n|".join(('|-', name, email, aliases, members)) + "\n"
+		for extra_group in extra_groups:
+			aliases = "\n"
+			for alias in extra_group['aliases']:
+				aliases += "* " + alias + "\n"
+			wikicode += "\n|".join(('|-', extra_group['name'], extra_group['email'], aliases, extra_group['members'])) + "\n"
 		wikicode += "|}"
 		r = s.get(api_url, params={
 			'action': 'query',
