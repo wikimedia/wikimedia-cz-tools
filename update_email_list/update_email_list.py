@@ -82,24 +82,6 @@ def main():
 			'lgpassword': config['password'],
 			'lgtoken': token
 		})
-		r = s.get(api_url, params={
-			'action': 'query',
-			'format': 'json',
-			'meta': 'tokens',
-			'type': 'csrf'
-		})
-		token = r.json()['query']['tokens']['csrftoken']
-		payload = {
-			'action': 'edit',
-			'format': 'json',
-			'title': 'E-mailové adresy/users.json',
-			'text': json.dumps(users),
-			'bot': 'true',
-			'minor': 'true',
-			'summary': 'Robot: Aktualizovan seznam existujicich Google ucctu',
-			'token': token,
-		}
-		r = s.post(api_url, data=payload)
 		# Fetch all existing roles and roles assignments
 		results = service.roles().list(customer='my_customer').execute()
 		roles = results.get('items', [])
@@ -171,24 +153,6 @@ def main():
 !Členové
 """
 		groups = service.groups().list(customer="my_customer").execute()['groups']
-		r = s.get(api_url, params={
-			'action': 'query',
-			'format': 'json',
-			'meta': 'tokens',
-			'type': 'csrf'
-		})
-		token = r.json()['query']['tokens']['csrftoken']
-		payload = {
-			'action': 'edit',
-			'format': 'json',
-			'title': 'E-mailové adresy/groups.json',
-			'text': json.dumps(groups),
-			'bot': 'true',
-			'minor': 'true',
-			'summary': 'Robot: Aktualizovan seznam existujicich Google skupin',
-			'token': token,
-		}
-		r = s.post(api_url, data=payload)
 		all_members = {}
 		for group in groups:
 			id = group['id']
@@ -224,24 +188,6 @@ def main():
 		aliases = "\n"
 		wikicode += "\n|".join(('|-', name, email, aliases, members)) + "\n"
 		wikicode += "|}"
-		r = s.get(api_url, params={
-			'action': 'query',
-			'format': 'json',
-			'meta': 'tokens',
-			'type': 'csrf'
-		})
-		token = r.json()['query']['tokens']['csrftoken']
-		payload = {
-			'action': 'edit',
-			'format': 'json',
-			'title': 'E-mailové adresy/members.json',
-			'text': json.dumps(all_members),
-			'bot': 'true',
-			'minor': 'true',
-			'summary': 'Robot: Aktualizovan seznam clenu existujicich Google skupin',
-			'token': token,
-		}
-		r = s.post(api_url, data=payload)
 		r = s.get(api_url, params={
 			'action': 'query',
 			'format': 'json',
