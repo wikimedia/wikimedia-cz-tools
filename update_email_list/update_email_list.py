@@ -94,6 +94,7 @@ def main():
 		data = json.loads(data[list(data.keys())[0]]["revisions"][0]['*'])
 		extra_users = data["users"]
 		extra_groups = data["groups"]
+		overrides = data["overrides"]
 		# Fetch all existing roles and roles assignments
 		results = service.roles().list(customer='my_customer').execute()
 		roles = results.get('items', [])
@@ -181,8 +182,8 @@ def main():
 			if 'aliases' in group:
 				for alias in group['aliases']:
 					aliases += "* " + alias + "\n"
-			if email == u"tracker-users@wikimedia.cz":
-				members += u"Všichni registrovaní uživatelé Trackeru, celý seznam je neveřejný.\n"
+			if overrides.get(email, {}).get('members') is not None:
+				members += overrides.get(email, {}).get('members')
 			else:
 				membersIterate = service.members().list(groupKey=id).execute()
 				all_members[group['id']] = membersIterate
