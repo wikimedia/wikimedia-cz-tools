@@ -173,6 +173,8 @@ def main():
 		groups = service.groups().list(customer="my_customer").execute()['groups']
 		all_members = {}
 		for group in groups:
+			if group['name'].startswith('[secret] '):
+				continue
 			id = group['id']
 			email = group['email']
 			if email == u"ucitele_ucebna@wikimedia.cz":
