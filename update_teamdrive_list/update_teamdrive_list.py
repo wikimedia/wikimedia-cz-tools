@@ -62,7 +62,7 @@ def main():
 	http = credentials.authorize(httplib2.Http())
 	service = discovery.build('drive', 'v2', http=http)
 
-	results = service.drives().list(useDomainAdminAccess=True).execute()
+	results = service.drives().list(useDomainAdminAccess=True, maxResults=100).execute()
 	teamDrives = results.get('items', [])
 
 	if not teamDrives:
