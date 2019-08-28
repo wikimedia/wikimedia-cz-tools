@@ -1,5 +1,6 @@
 #!/bin/bash
 
-cd /home/urbanecm/Documents/git/wmcz/gsuite-tools/update_email_list
+scriptdir="`dirname \"$0\"`"
+cd $scriptdir
 source ../venv/bin/activate
 python update_email_list.py
