@@ -26,4 +26,5 @@
 49 22 * * * /bin/bash /usr/local/wmcz-tools/update_teamdrive_list/update_teamdrive_list.sh
 0 18 * * * /bin/bash /usr/local/wmcz-tools/purge_members_data/purge_members_data.sh > /dev/null
 */10 * * * * /bin/bash /usr/local/wmcz-tools/scripts/cachetickets.sh
-
+0 0 * * * /bin/bash /usr/local/wmcz-tools/scripts/cachearchivedtickets.sh
+*/10 * * * * /bin/bash /usr/local/wmcz-tools/scripts/foreachwiki /var/www/wikis/mw/maintenance/runJobs.php &>> /var/log/mediawiki-jobs.log
