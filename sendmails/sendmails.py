@@ -18,12 +18,12 @@ def mails(subject, data, mail_file, from_mail, from_name, smtp_server):
 	if len(data[0].split('\t')) > 1:
 		header = data.pop(0).replace('\n', '').split('\t')
 	else:
-		header = None
+		header = ['mail']
 
 	orig_mailtext = open(mail_file).read()
 	mailtext = []
 	for paragraph in orig_mailtext.split('\n\n'):
-		mailtext.append("<p>%s</p>" % paragraph)
+		mailtext.append("<p>%s</p>" % paragraph.replace('<', '&lt;').replace('>', '&gt;'))
 	mailtext = "\n\n".join(mailtext)
 
 	s = smtplib.SMTP(smtp_server)
