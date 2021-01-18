@@ -9,5 +9,3 @@ pocetCestClenu=$(php /var/www/wikis/mw/maintenance/getText.php --wiki=innerwiki 
 echo $(($pocetSymClenu+$pocetCestClenu+$pocetRadnychClenu)) | php /var/www/wikis/mw/maintenance/edit.php --wiki=innerwiki --summary="Robot: Aktualizace počtu členů" --bot --minor --user=UrbanecmBot Členové/Celkový_počet_členů
 echo $pocetRadnychClenu | php /var/www/wikis/mw/maintenance/edit.php --wiki=innerwiki --summary="Robot: Aktualizace počtu členů" --bot --minor --user=UrbanecmBot Členové/Počet_řádných_členů
 echo Členové | php /var/www/wikis/mw/maintenance/purgePage.php --wiki=innerwiki -q
-echo $pocetRadnychClenu | php  /var/www/wikis/mw/maintenance/edit.php --wiki=pubwiki --summary="Robot: Aktualizace počtu členů" --bot --minor --user=UrbanecmBot Lidé/Počet_řádných_členů
-echo Lidé | php /var/www/wikis/mw/maintenance/purgePage.php --wiki=pubwiki -q
