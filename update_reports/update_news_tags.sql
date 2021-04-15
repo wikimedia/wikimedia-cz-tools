@@ -1,4 +1,4 @@
-TRUNCATE TABLE wmcz_reports_p.news_tags;
+DELETE FROM wmcz_reports_p.news_tags;
 
 INSERT INTO wmcz_reports_p.news_tags
 
