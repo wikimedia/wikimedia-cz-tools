@@ -1,6 +1,6 @@
-TRUNCATE TABLE wmcz_web_posts_p.news_category;
+TRUNCATE TABLE wmcz_reports_p.news_category;
 
-INSERT INTO wmcz_web_posts_p.news_category
+INSERT INTO wmcz_reports_p.news_category
 
 SELECT
 	object_id,

@@ -1,6 +1,6 @@
-DELETE FROM wmcz_web_posts_p.news_tags;
+DELETE FROM wmcz_reports_p.news_tags;
 
-INSERT INTO wmcz_web_posts_p.news_tags
+INSERT INTO wmcz_reports_p.news_tags
 
 SELECT
 	object_id,
