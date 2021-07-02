@@ -3,9 +3,12 @@
 set -e
 
 scriptdir="`dirname \"$0\"`"
+cd $scriptdir
 
-mysql < $scriptdir/update_news_web.sql
-mysql < $scriptdir/update_news_category.sql
-mysql < $scriptdir/update_news_tags.sql
-mysql < $scriptdir/update_blogposts.sql
-mysql < $scriptdir/update_short_link_clicks.sql
+for folder in website other; do
+	cd $folder
+	for sql in *.sql; do
+		mysql < $sql
+	done
+	cd $OLDPWD
+done
