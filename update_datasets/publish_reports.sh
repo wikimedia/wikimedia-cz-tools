@@ -1,13 +1,18 @@
 #!/bin/bash
 
-mkdir -p /var/www/files.wikimedia.cz/datasets/wmcz_reports
+set -e
 
-mysqldump wmcz_reports_p | gzip > /var/www/files.wikimedia.cz/datasets/wmcz_reports/wmcz_reports_p.sql.gz
+# delete all old data
+rm -rf /var/www/files.wikimedia.cz/datasets
+mkdir /var/www/files.wikimedia.cz/datasets
 
-for table in blogposts news_category news_tags news_web short_link_clicks; do
-	mysql wmcz_reports_p -e "SELECT * FROM $table" > /var/www/files.wikimedia.cz/datasets/wmcz_reports/$table.tsv
+for database in website other; do
+	# create SQL dump of the tables
+	mysqldump datasets_${database}_p | gzip > /var/www/files.wikimedia.cz/datasets/$database.sql.gz
+
+	# dump TSVs as well
+	mkdir -p /var/www/files.wikimedia.cz/datasets/$database
+	while read table; do
+		mysql datasets_${database}_p -e "SELECT * FROM $table" > /var/www/files.wikimedia.cz/datasets/$database/$table.tsv
+	done < <(mysql -e "SHOW TABLES;" datasets_${database}_p | sed 1d)
 done
-
-cd /var/www/files.wikimedia.cz/datasets
-tar czf data.tar.gz wmcz_reports
-mv data.tar.gz wmcz_reports
