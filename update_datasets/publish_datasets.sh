@@ -15,4 +15,7 @@ for database in website other; do
 	while read table; do
 		mysql datasets_${database}_p -e "SELECT * FROM $table" > /var/www/files.wikimedia.cz/datasets/$database/$table.tsv
 	done < <(mysql -e "SHOW TABLES;" datasets_${database}_p | sed 1d)
+
+	cd /var/www/files.wikimedia.cz/datasets
+	tar czf $database.tar.gz $database
 done
