@@ -86,7 +86,7 @@ def main():
 			"action": "query",
 			"format": "json",
 			"prop": "revisions",
-			"titles": "G Suite/Týmový disk.json",
+			"titles": "Google Workspace/Týmový disk.json",
 			"rvprop": "content"
 		})
 		data = r.json()["query"]["pages"]
@@ -135,7 +135,7 @@ def main():
 		payload = {
 			'action': 'edit',
 			'format': 'json',
-			'title': 'G Suite/Týmový disk',
+			'title': 'Google Workspace/Týmový disk',
 			'section': 1,
 			'text': wikitext,
 			'bot': 'true',
@@ -144,7 +144,7 @@ def main():
 			'token': token,
 		}
 		r = s.post(api_url, data=payload)
-		payload['title'] = u"G Suite/Týmový disk.json"
+		payload['title'] = u"Google Workspace/Týmový disk.json"
 		payload['summary'] = "Robot: Aktualizovana konfigurace"
 		payload['text'] = json.dumps(config['teamDrives'])
 		del(payload['section'])
