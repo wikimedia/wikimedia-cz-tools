@@ -29,5 +29,5 @@
 12 13 * * * /bin/bash /usr/local/wmcz-tools/scripts/updatemediainfo.sh
 0 0 * * * /bin/bash /usr/local/wmcz-tools/scripts/cachearchivedtickets.sh
 */10 * * * * /bin/bash /usr/local/wmcz-tools/scripts/foreachwiki /var/www/wikis/mw/maintenance/runJobs.php &>> /var/log/mediawiki-jobs.log
-20 19 * * * /bin/bash /usr/local/wmcz-tools/update_reports/update_reports.sh
-20 20 * * * /bin/bash /usr/local/wmcz-tools/update_reports/publish_reports.sh
+20 6 * * * /bin/bash /usr/local/wmcz-tools/update_datasets/update_datasets.sh
+20 7 * * * /bin/bash /usr/local/wmcz-tools/update_datasets/publish_datasets.sh
