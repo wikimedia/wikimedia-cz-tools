@@ -147,7 +147,7 @@ def main():
 		payload['title'] = u"Google Workspace/Týmový disk.json"
 		payload['summary'] = "Robot: Aktualizovana konfigurace"
 		payload['text'] = json.dumps(config['teamDrives'])
-		del(payload['section'])
+		del (payload['section'])
 		r = s.post(api_url, data=payload)
 
 
