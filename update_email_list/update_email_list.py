@@ -102,7 +102,7 @@ def main():
 		for role in roles:
 			role_name = role['roleName']
 			if role_name == "_SEED_ADMIN_ROLE":
-				role_name = u"Google Apps Administrator Seed Role"
+				role_name = u"Superadministrátor"
 			elif role_name == "_GROUPS_ADMIN_ROLE":
 				role_name = u"Administrátor skupin"
 			elif role_name == u"_USER_MANAGEMENT_ADMIN_ROLE":
@@ -138,10 +138,8 @@ def main():
 """
 		for user in users:
 			admin = "Ne"
-			if user['isAdmin']:
-				admin = u"\n* Superadministrátor\n"
-			elif user['isDelegatedAdmin']:
-				admin = u"\n"
+			if user['id'] in roles:
+				admin = u'\n'
 				for role in roles[user['id']]:
 					admin += u"* " + role + u'\n'
 			suspended = "Ne"
