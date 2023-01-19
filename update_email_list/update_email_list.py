@@ -220,7 +220,7 @@ def main():
 			'text': wikicode,
 			'bot': 'true',
 			'minor': 'true',
-			'summary': 'Robot: Aktualizovan seznam existujicich e-mailovych uctu',
+			'summary': 'Robot: Aktualizován seznam existujících e-mailových účtů',
 			'token': token,
 		}
 		r = s.post(api_url, data=payload)
