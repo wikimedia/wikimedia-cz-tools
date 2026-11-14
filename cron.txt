@@ -29,6 +29,6 @@
 */30 * * * * /bin/bash /usr/local/wmcz-tools/scripts/fiosync.sh
 12 13 * * * /bin/bash /usr/local/wmcz-tools/scripts/updatemediainfo.sh
 0 0 * * * /bin/bash /usr/local/wmcz-tools/scripts/cachearchivedtickets.sh
-*/10 * * * * /bin/bash /usr/local/wmcz-tools/scripts/foreachwiki /var/www/wikis/mw/maintenance/runJobs.php &>> /var/log/mediawiki-jobs.log
+*/10 * * * * /bin/bash /usr/local/wmcz-tools/scripts/foreachwiki /var/www/wikis/mw/current/maintenance/runJobs.php &>> /var/log/mediawiki-jobs.log
 20 6 * * * /bin/bash /usr/local/wmcz-tools/update_datasets/update_datasets.sh
 20 7 * * * /bin/bash /usr/local/wmcz-tools/update_datasets/publish_datasets.sh
